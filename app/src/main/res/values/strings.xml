@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SearchSMS</string>
+    <string name="action_settings">Settings</string>
+
+    <string-array name="spinner_array">
+        <item>Search by name</item>
+        <item>Search for word</item>
+
+    </string-array>
+
+</resources>
