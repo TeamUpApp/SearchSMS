@@ -42,13 +42,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listView"
-        android:layout_below="@+id/btn_search"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/btn_search"
-        android:layout_alignEnd="@+id/btn_search" >
+        android:layout_alignEnd="@+id/btn_search"
+        android:layout_below="@+id/textView">
 
 
     </ListView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/btn_search" />
 
 </RelativeLayout>

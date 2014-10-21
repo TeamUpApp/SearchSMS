@@ -2,9 +2,12 @@ package com.example.clazell.searchsms;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,6 +71,25 @@ public class MyActivity extends Activity {
         public PlaceholderFragment() {
         }
 
+        public static String getContactName(Context context, String phoneNumber) {
+            ContentResolver cr = context.getContentResolver();
+            Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+            Cursor cursor = cr.query(uri, new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME}, null, null, null);
+            if (cursor == null) {
+                return null;
+            }
+            String contactName = null;
+            if(cursor.moveToFirst()) {
+                contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
+            }
+
+            if(cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+
+            return contactName;
+        }
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
@@ -77,9 +99,7 @@ public class MyActivity extends Activity {
 
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                     R.array.spinner_array, android.R.layout.simple_spinner_item);
-// Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
             spinner.setAdapter(adapter);
 
             btnSearch = (Button) rootView.findViewById(R.id.btn_search);
@@ -99,15 +119,18 @@ public class MyActivity extends Activity {
                     String[] number = new String[cursor.getCount()];
 
                     String[] foundSMS = new String[cursor.getCount()];
+                    String[] foundSMSName = new String[cursor.getCount()];
                     int amountofFS = 0;
 
                     if(cursor.moveToFirst()){
                         for(int i=0;i<cursor.getCount();i++) {
                             body[i] = cursor.getString(cursor.getColumnIndexOrThrow("body")).toString();
+                            number[i] = cursor.getString(cursor.getColumnIndexOrThrow("address")).toString();
                             found = body[i].contains(wordToSearch);
 
                             if(found){
                                 foundSMS[amountofFS] = body[i];
+                                foundSMSName[amountofFS] = number[i];
                                 amountofFS++;
                                 found = false;
                             }
@@ -127,6 +150,7 @@ public class MyActivity extends Activity {
                             android.R.layout.simple_list_item_1, list);
 
                     listview.setAdapter(adapter);
+
                 }
             });
 
