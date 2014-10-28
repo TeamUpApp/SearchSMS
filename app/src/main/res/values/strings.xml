@@ -7,7 +7,20 @@
     <string-array name="spinner_array">
         <item>Search by name</item>
         <item>Search for word</item>
-
     </string-array>
 
+    <string name="title_activity_main_activty">MainActivty</string>
+    <string name="title_section1">Search</string>
+    <string name="title_section2">Saved</string>
+    <string name="title_section3">Settings</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="prefs_case_key">case_sensitive</string>
+    <string name="prefs_case_name">Case sensitive</string>
+    <string name="prefs_case_description">Case sensitive search</string>
+
+    <string name="prefs_exact_key">exact_search</string>
+    <string name="prefs_exact_name">Exact Search</string>
+    <string name="prefs_exact_description">Only find exact matches</string>
 </resources>
