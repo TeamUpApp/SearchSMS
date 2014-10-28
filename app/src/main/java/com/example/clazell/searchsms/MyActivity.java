@@ -23,7 +23,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 
 public class MyActivity extends Activity {
@@ -117,7 +121,7 @@ public class MyActivity extends Activity {
                     Cursor cursor = getActivity().getApplicationContext().getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
 
                     String wordToSearch = searchWord.getText().toString();
-                    Boolean found;
+                    Boolean found = false;
 
                     String[] body = new String[cursor.getCount()];
                     String[] number = new String[cursor.getCount()];
@@ -166,6 +170,64 @@ public class MyActivity extends Activity {
             });
 
             return rootView;
+        }
+
+        public Map<String, Word> sortUserWords(){
+            Map<String, Word> countMap = new HashMap<String, Word>();
+            Cursor cursor = getActivity().getApplicationContext().getContentResolver().query(Uri.parse("content://sms/sent"), null, null, null, null);
+
+            String line;
+
+            if (cursor.moveToFirst()) {
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    line = cursor.getString(cursor.getColumnIndexOrThrow("body")).toString();
+                    String[] words = line.split("[^A-ZÃ…Ã„Ã–a-zÃ¥Ã¤Ã¶]+");
+                    for (String word : words) {
+                        if ("".equals(word)) {
+                            continue;
+                        }
+
+                        Word wordObj = countMap.get(word);
+                        if (wordObj == null) {
+                            wordObj = new Word();
+                            wordObj.word = word;
+                            wordObj.count = 0;
+                            countMap.put(word, wordObj);
+                        }
+
+                        wordObj.count++;
+                    }
+
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
+
+            return countMap;
+        }
+
+        public static class Word implements Comparable<Word>
+        {
+            String word;
+            int count;
+
+            @Override
+            public int hashCode()
+            {
+                return word.hashCode();
+            }
+
+            @Override
+            public boolean equals(Object obj)
+            {
+                return word.equals(((Word)obj).word);
+            }
+
+            @Override
+            public int compareTo(Word b)
+            {
+                return b.count - count;
+            }
         }
 
         public void onItemSelected(AdapterView<?> parent, View view,
