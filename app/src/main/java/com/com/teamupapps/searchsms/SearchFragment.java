@@ -7,11 +7,14 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.teamupapps.searchsms.R;
 
 import java.util.List;
@@ -33,10 +36,19 @@ public class SearchFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        AdView mAdView = (AdView) getView().findViewById(R.id.ads);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main_activty, container, false);
-        editSearch = (EditText)rootView.findViewById(R.id.editText);
+        editSearch = (EditText) rootView.findViewById(R.id.editText);
         editSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -48,8 +60,8 @@ public class SearchFragment extends Fragment {
             }
         });
         listview = (ListView) rootView.findViewById(R.id.listView);
-        textCount = (TextView)rootView.findViewById(R.id.text_count);
-
+        textCount = (TextView) rootView.findViewById(R.id.text_count);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         return rootView;
     }
 
@@ -59,10 +71,11 @@ public class SearchFragment extends Fragment {
 
     }
 
-    private void performSearch(String text){
+    private void performSearch(String text) {
         List<SMS> found = SearchUtils.readMessages(getActivity(), text);
         MessageListAdapter adapter = new MessageListAdapter(getActivity(), found);
         listview.setAdapter(adapter);
         textCount.setText("Found " + found.size() + " messages containing \"" + text + "\"");
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 }
