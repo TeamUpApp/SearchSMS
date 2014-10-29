@@ -7,12 +7,16 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.teamupapps.searchsms.R;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by nrobatmeily on 27/10/2014.
@@ -21,6 +25,8 @@ public class SearchUtils {
 
 
     public static List<SMS> readMessages(Context context, String wordToSearch) {
+        Map<String, String> contactMap = getContactList(context);
+
         List<SMS> smsList = new LinkedList<SMS>();
         Cursor cursor = context.getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
         Boolean found= false;
@@ -64,7 +70,7 @@ public class SearchUtils {
 
 
                 if (found) {
-                    SMS foundSMS = new SMS(id[i], number[i], body[i], date[i]);
+                    SMS foundSMS = new SMS(id[i], getContactName(number[i], contactMap), body[i], date[i]);
                     smsList.add(foundSMS);
                     amountofFS++;
                     found = false;
@@ -78,23 +84,55 @@ public class SearchUtils {
 
 
     }
-    public static String getContactName(Context context, String phoneNumber) {
-        ContentResolver cr = context.getContentResolver();
-        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
-        Cursor cursor = cr.query(uri, new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME}, null, null, null);
-        if (cursor == null) {
-            return null;
-        }
-        String contactName = null;
-        if(cursor.moveToFirst()) {
-            contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
-        }
 
-        if(cursor != null && !cursor.isClosed()) {
-            cursor.close();
-        }
+    public static Map getContactList(Context context){
+        String zip = "+"+GetCountryZipCode(context);
+        Cursor phones = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null, null);
+        Map<String, String> countMap = new HashMap<String, String>();
+        while (phones.moveToNext())
+        {
+            String name=phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-        return contactName;
+            if(phoneNumber.startsWith("0")){
+                String codeNumber = zip+phoneNumber.substring(1);
+                phoneNumber = codeNumber.replaceAll("\\s","");
+            }
+
+            countMap.put(phoneNumber, name);
+        }
+        phones.close();
+
+        return countMap;
+    }
+
+    public static String getContactName(String number ,Map<String, String> cMap) {
+
+        Map<String, String> contactMap = cMap;
+        String contactName;
+        contactName = contactMap.get(number);
+        if(contactName != null) {
+            return contactName;
+        }else{
+            return number;
+        }
+    }
+
+    public static String GetCountryZipCode(Context context){
+        String CountryID="";
+        String CountryZipCode="";
+
+        TelephonyManager manager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        CountryID= manager.getSimCountryIso().toUpperCase();
+        String[] rl=context.getResources().getStringArray(R.array.CountryCodes);
+        for(int i=0;i<rl.length;i++){
+            String[] g=rl[i].split(",");
+            if(g[1].trim().equals(CountryID.trim())){
+                CountryZipCode=g[0];
+                break;
+            }
+        }
+        return CountryZipCode;
     }
 
 }
