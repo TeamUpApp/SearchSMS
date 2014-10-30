@@ -3,6 +3,10 @@ package com.com.teamupapps.searchsms;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +19,8 @@ import android.widget.TextView;
 
 import com.teamupapps.searchsms.R;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -85,7 +91,28 @@ public class MessageListAdapter extends ArrayAdapter<SMS> {
                 popup.show(); //showing popup menu
             }
         });
+
+
+        if (list.get(position).getImageURI() != null) {
+            try {
+                Bitmap bitmap = SearchUtils.getRoundedShape( MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(list.get(position).getImageURI())));
+                viewHolder.image.setImageBitmap(bitmap);
+                System.out.println(bitmap);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                viewHolder.image.setImageResource(R.drawable.contact);
+            } catch (IOException e) {
+                e.printStackTrace();
+                viewHolder.image.setImageResource(R.drawable.contact);
+            }
+
+
+        } else {
+            Log.w("tag", "os null");
+            viewHolder.image.setImageResource(R.drawable.contact);
+        }
         return convertView;
 
     }
+
 }

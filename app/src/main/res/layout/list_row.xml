@@ -9,6 +9,8 @@
         android:id="@+id/image_profile"
         android:layout_width="wrap_content"
         android:padding="5sp"
+        android:minHeight="50sp"
+        android:minWidth="50sp"
         android:layout_centerVertical="true"
         android:background="@android:color/background_light"
         android:src="@drawable/contact"
