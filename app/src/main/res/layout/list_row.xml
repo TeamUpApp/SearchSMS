@@ -21,6 +21,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:padding="5sp"
+        android:layout_marginRight="5sp"
         android:layout_width="wrap_content"
         android:gravity="center_vertical"
         android:src="@drawable/more"
@@ -31,12 +32,14 @@
         android:layout_toRightOf="@id/image_profile"
         android:background="@android:color/background_light"
         android:layout_width="wrap_content"
+        android:padding="5sp"
         android:textStyle="bold"
         android:layout_height="wrap_content"
         android:id="@+id/txt_contact_name" />
 
     <TextView
         android:layout_toRightOf="@id/image_profile"
+
         android:layout_below="@id/txt_contact_name"
         android:padding="5sp"
         android:layout_toLeftOf="@id/btn_settings"
