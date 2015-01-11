@@ -15,16 +15,14 @@
     <string name="title_section3">Settings</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="prefs_case_key">case_sensitive</string>
     <string name="prefs_case_name">Case sensitive</string>
     <string name="prefs_case_description">Case sensitive search</string>
-
     <string name="prefs_exact_key">exact_search</string>
     <string name="prefs_exact_name">Exact Search</string>
     <string name="prefs_exact_description">Only find exact matches</string>
 
-    <string-array name="CountryCodes" >
+    <string-array name="CountryCodes">
         <item>93,AF</item>
         <item>355,AL</item>
         <item>213,DZ</item>
@@ -232,4 +230,7 @@
         <item>260,ZM</item>
         <item>263,ZW</item>
     </string-array>
+
+    <string name="title_activity_fullscreen">SEARCH SMS</string>
+
 </resources>
