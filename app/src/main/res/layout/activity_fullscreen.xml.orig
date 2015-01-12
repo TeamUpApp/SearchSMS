@@ -1,0 +1,66 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0099cc"
+    android:orientation="vertical"
+    tools:context="com.com.teamupapps.searchsms.FullscreenActivity">
+
+
+    <LinearLayout
+        android:id="@+id/ll_row1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Button
+            style="@style/MainMenuButtonLight"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+               android:onClick="keywordClicked"
+            android:drawableTop="@drawable/search_icon"
+            android:text="Keyword Search" />
+
+        <Button
+
+            style="@style/MainMenuButtonDark"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+<<<<<<< HEAD
+            android:onClick="keywordMClicked"
+=======
+            android:onClick="imageClicked"
+>>>>>>> Added Activities for ImageSearch and LinkSearch
+            android:drawableTop="@drawable/pic"
+            android:text="Image Search" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_row2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <Button
+            style="@style/MainMenuButtonDark"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="linkClicked"
+            android:drawableTop="@drawable/link"
+            android:text="Link Search" />
+
+        <Button
+            style="@style/MainMenuButtonLight"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+</LinearLayout>
