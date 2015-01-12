@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.com.teamupapps.searchsms.fragments.MMSFragment;
 import com.com.teamupapps.searchsms.fragments.MenuFragment;
 import com.com.teamupapps.searchsms.fragments.NavigationDrawerFragment;
 import com.com.teamupapps.searchsms.fragments.SearchFragment;
@@ -47,7 +48,7 @@ public class MainActivty extends Activity
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, new MenuFragment())
+                .replace(R.id.container, new SearchFragment())
                 .commit();
     }
 
