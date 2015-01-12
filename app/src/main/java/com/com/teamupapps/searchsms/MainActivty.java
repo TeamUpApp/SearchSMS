@@ -8,6 +8,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.com.teamupapps.searchsms.fragments.MenuFragment;
+import com.com.teamupapps.searchsms.fragments.NavigationDrawerFragment;
+import com.com.teamupapps.searchsms.fragments.SearchFragment;
 import com.teamupapps.searchsms.R;
 
 
@@ -39,13 +42,12 @@ public class MainActivty extends Activity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
-
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, new SearchFragment())
+                .replace(R.id.container, new MenuFragment())
                 .commit();
     }
 

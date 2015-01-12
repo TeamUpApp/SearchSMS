@@ -6,4 +6,4 @@
     android:divider="@android:color/transparent"
     android:dividerHeight="0dp"
     android:background="@color/actionbar_background"
-    tools:context="com.com.teamupapps.searchsms.NavigationDrawerFragment" />
+    tools:context="com.com.teamupapps.searchsms.fragments.NavigationDrawerFragment" />
