@@ -232,5 +232,8 @@
     </string-array>
 
     <string name="title_activity_fullscreen">SEARCH SMS</string>
+    <string name="title_activity_search_image">SearchImageActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_fragment_search_links">FragmentSearchLinks</string>
 
 </resources>

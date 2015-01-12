@@ -1,14 +1,8 @@
 package com.com.teamupapps.searchsms;
 
-import com.com.teamupapps.searchsms.util.SystemUiHider;
-
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.teamupapps.searchsms.R;
@@ -34,4 +28,13 @@ public class FullscreenActivity extends Activity {
         startActivity(intent);
     }
 
+    public void linkClicked(View view){
+        Intent intent = new Intent (FullscreenActivity.this, SearchLinkActivity.class);
+        startActivity(intent);
+    }
+
+    public void imageClicked(View view){
+        Intent intent = new Intent (FullscreenActivity.this, SearchImageActivity.class);
+        startActivity(intent);
+    }
 }

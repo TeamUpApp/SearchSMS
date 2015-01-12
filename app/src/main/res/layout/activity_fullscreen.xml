@@ -29,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="keywordMClicked"
+            android:onClick="imageClicked"
             android:drawableTop="@drawable/pic"
             android:text="Image Search" />
 
@@ -47,7 +47,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-
+            android:onClick="linkClicked"
             android:drawableTop="@drawable/link"
             android:text="Link Search" />
 
