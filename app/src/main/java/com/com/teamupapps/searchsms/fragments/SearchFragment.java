@@ -103,10 +103,7 @@ public class SearchFragment extends Fragment {
 
     }
 
-    private void findMMS(){
-         List<MMS> mmsfound = SearchUtils.readMMS(getActivity());
-        Log.i("MMS LIST", mmsfound.size()+"");
-    }
+
 
     private void findHyperLinks(){
         List<SMS> smsLinksFound = SearchUtils.getHyperlinks(getActivity());

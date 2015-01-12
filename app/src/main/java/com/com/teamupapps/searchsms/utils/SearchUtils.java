@@ -34,75 +34,87 @@ import java.util.regex.Pattern;
  */
 public class SearchUtils {
 
-    public static List<MMS> readMMS(Context context){
+    public static List<MMS> readMMS(Context context) {
 
-    List<MMS> mmsList = new LinkedList<MMS>();
+        List<MMS> mmsList = new LinkedList<MMS>();
 
-    Map<String, String> contactMap = getContactList(context);
-    Map<String, String> contactImageMap = getContactPhotoList(context);
+        Map<String, String> contactMap = getContactList(context);
+        Map<String, String> contactImageMap = getContactPhotoList(context);
 
-    Cursor cursor = context.getContentResolver().query(Uri.parse("content://mms/inbox"), null, null, null, null);
+        Cursor cursor = context.getContentResolver().query(Uri.parse("content://mms/inbox"), null, null, null, null);
 
-    String[] mmsBody = new String[cursor.getCount()];
-    String[] number = new String[cursor.getCount()];
-    String[] id = new String[cursor.getCount()];
-    String[] date = new String[cursor.getCount()];
-    Bitmap[] bitmap = new Bitmap[cursor.getCount()];
-    String body = "";
+        String[] mmsBody = new String[cursor.getCount()];
+        String[] number = new String[cursor.getCount()];
+        String[] id = new String[cursor.getCount()];
+        String[] date = new String[cursor.getCount()];
+        Bitmap[] bitmap = new Bitmap[cursor.getCount()];
+        String body = "";
 
-    if (cursor.moveToFirst()) {
-        String string = cursor.getString(cursor.getColumnIndex("ct_t"));
-        if ("application/vnd.wap.multipart.related".equals(string)) {
-            // it's MMS
-            String mmsId = cursor.getString(cursor.getColumnIndex("_id"));
-        for (int i = 0; i < cursor.getCount(); i++) {
-            String selectionPart = "mid=" + mmsId;
-            Uri uri = Uri.parse("content://mms/part");
-            Cursor cursor2 = context.getContentResolver().query(uri, null,
-                    selectionPart, null, null);
+        if (cursor.moveToFirst()) {
 
-            if (cursor2.moveToFirst()) {
+                String string = cursor.getString(cursor.getColumnIndex("ct_t"));
+                if ("application/vnd.wap.multipart.related".equals(string)) {
 
-                String partId = cursor2.getString(cursor2.getColumnIndex("_id"));
-                String type = cursor2.getString(cursor2.getColumnIndex("ct"));
-                if ("text/plain".equals(type)) {
-                    String data = cursor2.getString(cursor2.getColumnIndex("_data"));
+                    for (int i = 0; i < cursor.getCount(); i++) {
+                        String mmsId = cursor.getString(cursor.getColumnIndex("_id"));
 
-                    if (data != null) {
-                        // implementation of this method below
-                        body = getMmsText(context, partId);
-                    } else {
-                        body = cursor2.getString(cursor2.getColumnIndex("text"));
+                        String selectionPart = "mid =" + mmsId;
+                        Uri uri = Uri.parse("content://mms/part");
+                        Cursor cursor2 = context.getContentResolver().query(uri, null,
+                                selectionPart, null, null);
+                        Log.i("ID ad i",mmsId+" "+i);
+
+                        if (cursor2.moveToFirst()) {
+                            do {
+                                String partId = cursor2.getString(cursor2.getColumnIndex("_id"));
+                                String type = cursor2.getString(cursor2.getColumnIndex("ct"));
+
+                                if ("text/plain".equals(type)) {
+                                    String data = cursor2.getString(cursor2.getColumnIndex("_data"));
+                                    Log.i("data", "" + i + " " + data);
+
+                                    if (data != null) {
+                                        // implementation of this method below
+                                        body = getMmsText(context, partId);
+                                    } else {
+                                        body = cursor2.getString(cursor2.getColumnIndex("text"));
+                                    }
+
+                                }else{body = "";}
+
+                                if ("image/jpeg".equals(type) || "image/bmp".equals(type) ||
+                                        "image/gif".equals(type) || "image/jpg".equals(type) ||
+                                        "image/png".equals(type)) {
+                                    bitmap[i] = getMmsImage(context, partId);
+                                    Log.i("IMAGE", "" + i + " " + bitmap.toString());
+                                }
+                                //}
+
+                                id[i] = partId;
+                                mmsBody[i] = body;
+                                number[i] = "";
+                                date[i] = "";
+
+                               // MMS foundMMS = new MMS(id[i], getContactName(number[i], contactMap), mmsBody[i], date[i], getContactName(number[i], contactImageMap), bitmap[i]);
+                               // MMS foundMMS = new MMS(partId, getContactName(number[i], contactMap), body, "", getContactName(number[i], contactImageMap), getMmsImage(context, partId));
+                                //mmsList.add(foundMMS);
+                            } while (cursor2.moveToNext());
+                            MMS foundMMS = new MMS(id[i], getContactName(number[i], contactMap), mmsBody[i], date[i], getContactName(number[i], contactImageMap), bitmap[i]);
+                            mmsList.add(foundMMS);
+                            mmsBody[i] ="";
+                        }
+                        cursor.moveToNext();
                     }
 
                 }
 
-                if ("image/jpeg".equals(type) || "image/bmp".equals(type) ||
-                        "image/gif".equals(type) || "image/jpg".equals(type) ||
-                        "image/png".equals(type)) {
-                    bitmap[i] = getMmsImage(context, partId);
-                }
-
-                id[i] = cursor2.getString(cursor.getColumnIndexOrThrow("_id")).toString();
-                mmsBody[i] = body;
-                number[i] = "";
-                date[i] = "";
-
-                MMS foundMMS = new MMS(id[i], getContactName(number[i], contactMap), mmsBody[i], date[i], getContactName(number[i], contactImageMap), bitmap[i]);
-                mmsList.add(foundMMS);
-            }
-            cursor2.moveToNext();
         }
-            cursor.moveToNext();
-        }
+
+        return mmsList;
 
     }
 
-    return mmsList;
-
-    }
-
-    public static  List<SMS> getHyperlinks(Context context){
+    public static List<SMS> getHyperlinks(Context context) {
         Map<String, String> contactMap = getContactList(context);
         Map<String, String> contactImageMap = getContactPhotoList(context);
 
@@ -122,16 +134,16 @@ public class SearchUtils {
                 number[i] = cursor.getString(cursor.getColumnIndexOrThrow("address")).toString();
                 date[i] = cursor.getString(cursor.getColumnIndexOrThrow("date")).toString();
 
-                    String regex = "\\(?\\b(http://|www[.]|Www[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
-                    Pattern p = Pattern.compile(regex);
-                    Matcher m = p.matcher(body[i]);
-                    while(m.find()) {
-                        String urlStr = m.group();
-                        if (urlStr.startsWith("(") && urlStr.endsWith(")")){
-                            urlStr = urlStr.substring(1, urlStr.length() - 1);
-                        }
-                        found = true;
+                String regex = "\\(?\\b(http://|www[.]|Www[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
+                Pattern p = Pattern.compile(regex);
+                Matcher m = p.matcher(body[i]);
+                while (m.find()) {
+                    String urlStr = m.group();
+                    if (urlStr.startsWith("(") && urlStr.endsWith(")")) {
+                        urlStr = urlStr.substring(1, urlStr.length() - 1);
                     }
+                    found = true;
+                }
 
                 if (found) {
                     SMS foundSMS = new SMS(id[i], getContactName(number[i], contactMap), body[i], date[i], getContactName(number[i], contactImageMap));
@@ -147,25 +159,26 @@ public class SearchUtils {
 
     }
 
-    public static Bitmap getMmsImage(Context context,String _id) {
+    public static Bitmap getMmsImage(Context context, String _id) {
         Uri partURI = Uri.parse("content://mms/part/" + _id);
         InputStream is = null;
         Bitmap bitmap = null;
         try {
             is = context.getContentResolver().openInputStream(partURI);
             bitmap = BitmapFactory.decodeStream(is);
-        } catch (IOException e) {}
-        finally {
+        } catch (IOException e) {
+        } finally {
             if (is != null) {
                 try {
                     is.close();
-                } catch (IOException e) {}
+                } catch (IOException e) {
+                }
             }
         }
         return bitmap;
     }
 
-    public static String getMmsText(Context context,String id) {
+    public static String getMmsText(Context context, String id) {
         Uri partURI = Uri.parse("content://mms/part/" + id);
         InputStream is = null;
         StringBuilder sb = new StringBuilder();
@@ -180,12 +193,13 @@ public class SearchUtils {
                     temp = reader.readLine();
                 }
             }
-        } catch (IOException e) {}
-        finally {
+        } catch (IOException e) {
+        } finally {
             if (is != null) {
                 try {
                     is.close();
-                } catch (IOException e) {}
+                } catch (IOException e) {
+                }
             }
         }
         return sb.toString();
@@ -353,7 +367,7 @@ public class SearchUtils {
         int targetWidth = 50;
         int targetHeight = 50;
         Bitmap targetBitmap = Bitmap.createBitmap(targetWidth,
-                targetHeight,Bitmap.Config.ARGB_8888);
+                targetHeight, Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(targetBitmap);
         Path path = new Path();

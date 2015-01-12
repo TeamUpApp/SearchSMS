@@ -1,12 +1,45 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+
     tools:context="com.com.teamupapps.searchsms.SearchImageActivity$PlaceholderFragment">
 
     <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:background="@color/actionbar_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_count"
+        android:textAllCaps="true"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:padding="5sp"
+        android:textColor="@android:color/white"
+        android:layout_alignParentTop="true" />
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/ads"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentBottom="true"
+
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-9937398086664264/7454557432">
+
+    </com.google.android.gms.ads.AdView>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/ads"
+        android:id="@+id/listView"
+        android:layout_below="@+id/editText"></ListView>
 
 </RelativeLayout>
