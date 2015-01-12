@@ -28,6 +28,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnEditorAction;
+
 /**
  * Created by nrobatmeily on 28/10/2014.
  */
@@ -37,9 +41,12 @@ public class SearchFragment extends Fragment {
      * fragment.
      */
 
-    private ListView listview;
-    private EditText editSearch;
-    private TextView textCount;
+    @InjectView(R.id.listView)
+    ListView listview;
+    @InjectView(R.id.editText)
+    EditText editSearch;
+    @InjectView(R.id.text_count)
+    TextView textCount;
 
     public SearchFragment() {
     }
@@ -57,31 +64,11 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main_activty, container, false);
+        ButterKnife.inject(this, rootView);
 
-        final ListView listView = (ListView) rootView.findViewById(R.id.listView);
 
-        final Map<String, String> countMap;
-        countMap = SearchUtils.getContactList(getActivity());
-        final String names[];
-        List<Contact> cnt;
-        List<String> cmtct = new LinkedList<String>();
 
-        for (Map.Entry<String, String> entry : countMap.entrySet())
-        {
-            System.out.println(entry.getKey() + "/" + entry.getValue());
-            cmtct.add(entry.getValue());
-
-        }
-
-        if(cmtct != null) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                    android.R.layout.simple_list_item_1, android.R.id.text1, cmtct);
-
-            listView.setAdapter(adapter);
-        }
-
-        editSearch = (EditText) rootView.findViewById(R.id.editText);
-        editSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        /*editSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -90,11 +77,19 @@ public class SearchFragment extends Fragment {
                 }
                 return false;
             }
-        });
-        listview = (ListView) rootView.findViewById(R.id.listView);
-        textCount = (TextView) rootView.findViewById(R.id.text_count);
+        });*/
+
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         return rootView;
+    }
+
+    @OnEditorAction(R.id.editText)
+    public boolean onEditorAction(int actionId) {
+        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+            performSearch(editSearch.getText().toString());
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -103,11 +98,31 @@ public class SearchFragment extends Fragment {
 
     }
 
+    private void setUpContactsList() {
+        final Map<String, String> countMap;
+        countMap = SearchUtils.getContactList(getActivity());
+        final String names[];
+        List<Contact> cnt;
+        List<String> cmtct = new LinkedList<String>();
+
+        for (Map.Entry<String, String> entry : countMap.entrySet()) {
+            System.out.println(entry.getKey() + "/" + entry.getValue());
+            cmtct.add(entry.getValue());
+
+        }
+
+        if (cmtct != null) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                    android.R.layout.simple_list_item_1, android.R.id.text1, cmtct);
+
+            //listView.setAdapter(adapter);
+        }
+    }
 
 
-    private void findHyperLinks(){
+    private void findHyperLinks() {
         List<SMS> smsLinksFound = SearchUtils.getHyperlinks(getActivity());
-        Log.i("Link LIST", smsLinksFound.size()+"");
+        Log.i("Link LIST", smsLinksFound.size() + "");
     }
 
     private void performSearch(String text) {

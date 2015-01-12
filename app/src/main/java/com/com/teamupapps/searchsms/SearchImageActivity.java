@@ -29,6 +29,9 @@ import com.teamupapps.searchsms.R;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 public class SearchImageActivity extends Activity {
 
     @Override
@@ -71,9 +74,10 @@ public class SearchImageActivity extends Activity {
      */
     public static class PlaceholderFragment extends Fragment {
 
-        private ListView listview;
-        private EditText editSearch;
-        private TextView textCount;
+        @InjectView(R.id.listView)
+        ListView listview;
+        @InjectView(R.id.text_count)
+        TextView textCount;
 
         public PlaceholderFragment() {
         }
@@ -91,43 +95,25 @@ public class SearchImageActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_search_image, container, false);
-
-            listview = (ListView) rootView.findViewById(R.id.listView);
-            textCount = (TextView) rootView.findViewById(R.id.text_count);
+            ButterKnife.inject(this, rootView);
 
             List<MMS> mmsfound = findMMS();
-            if(!mmsfound.isEmpty()){
-
-                ImageMessageAdapter adapter = new ImageMessageAdapter(getActivity(), mmsfound);
-                textCount.setText("Found " + mmsfound.size() );
-                listview.setAdapter(adapter);
-
-                getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
+            if (!mmsfound.isEmpty()) {
+                setUpMessageView(mmsfound);
             }
-           // performSearch();
-
-
 
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
-
             return rootView;
         }
 
-        private void performSearch() {
-           // List<SMS> found = SearchUtils.readMessages(getActivity(), text);
-            List<MMS> found = SearchUtils.readMMS(getActivity());
-            ImageMessageAdapter adapter = new ImageMessageAdapter(getActivity(), found);
-            textCount.setText("Found " + found.size() );
+        private void setUpMessageView(List<MMS> mmsfound) {
+            ImageMessageAdapter adapter = new ImageMessageAdapter(getActivity(), mmsfound);
+            textCount.setText("Found " + mmsfound.size());
             listview.setAdapter(adapter);
-
-            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         }
 
-        private List<MMS> findMMS(){
+        private List<MMS> findMMS() {
             List<MMS> mmsfound = SearchUtils.readMMS(getActivity());
-            Log.i("MMS LIST", mmsfound.size() + "");
 
             return mmsfound;
         }

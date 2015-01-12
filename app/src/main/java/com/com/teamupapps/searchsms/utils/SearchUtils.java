@@ -62,6 +62,17 @@ public class SearchUtils {
                         Uri uri = Uri.parse("content://mms/part");
                         Cursor cursor2 = context.getContentResolver().query(uri, null,
                                 selectionPart, null, null);
+
+                       // String addselectionPart = "mid =" + mmsId;
+                       // "content://mms/{MmsId}/addr"
+                        Uri adduri = Uri.parse("content://mms/"+mmsId+"/addr" );
+                        Cursor cursoradd = context.getContentResolver().query(adduri, null,
+                                null, null, null);
+                        if(cursoradd.moveToFirst()) {
+
+
+                            number[i] = cursoradd.getString(cursoradd.getColumnIndex("address"));
+                        }
                         Log.i("ID ad i",mmsId+" "+i);
 
                         if (cursor2.moveToFirst()) {
@@ -92,13 +103,15 @@ public class SearchUtils {
 
                                 id[i] = partId;
                                 mmsBody[i] = body;
-                                number[i] = "";
+
                                 date[i] = "";
 
                                // MMS foundMMS = new MMS(id[i], getContactName(number[i], contactMap), mmsBody[i], date[i], getContactName(number[i], contactImageMap), bitmap[i]);
                                // MMS foundMMS = new MMS(partId, getContactName(number[i], contactMap), body, "", getContactName(number[i], contactImageMap), getMmsImage(context, partId));
                                 //mmsList.add(foundMMS);
                             } while (cursor2.moveToNext());
+
+                            Log.i("YO", getContactName(number[i], contactMap));
                             MMS foundMMS = new MMS(id[i], getContactName(number[i], contactMap), mmsBody[i], date[i], getContactName(number[i], contactImageMap), bitmap[i]);
                             mmsList.add(foundMMS);
                             mmsBody[i] ="";

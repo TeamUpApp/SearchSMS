@@ -15,7 +15,7 @@ public class MMS {
         private String imageURI;
         private Bitmap bitmap;
 
-        public MMS(String id, String name, String content, String date, String imageURI,Bitmap bitmap) {
+        public MMS(String id, String name, String content, String date, String imageURI, Bitmap bitmap) {
             this.id = id;
             this.name = name;
             this.content = content;

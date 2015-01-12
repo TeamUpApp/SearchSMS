@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -25,6 +26,10 @@ import com.teamupapps.searchsms.R;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnEditorAction;
 
 /**
  * Created by clazell on 12/01/2015.
@@ -42,41 +47,45 @@ public class ImageMessageAdapter extends
         this.list = list;
     }
 
-
     static class ViewHolder {
-        protected ImageView image;
-        protected ImageView imageMessage;
-        protected TextView name;
-        protected TextView message;
-        protected ImageButton buttonMore;
+
+        @InjectView(R.id.image_profile) ImageView image;
+        @InjectView(R.id.image_message) ImageView imageMessage;
+        @InjectView(R.id.txt_contact_name) TextView name;
+        @InjectView(R.id.txt_message) TextView message;
+        @InjectView(R.id.btn_settings) ImageButton buttonMore;
+
+        public ViewHolder(View view){
+            ButterKnife.inject(this, view);
+        }
 
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        final ViewHolder holder;
+        if (convertView != null) {
+            holder = (ViewHolder) convertView.getTag();
+        } else {
+            if (inflater == null)
+                inflater = (LayoutInflater) context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-
-        if (inflater == null)
-            inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (convertView == null)
-            convertView = inflater.inflate(R.layout.image_list_row, null);
-        final ViewHolder viewHolder = new ViewHolder();
-        viewHolder.image = (ImageView) convertView.findViewById(R.id.image_profile);
-        viewHolder.imageMessage = (ImageView) convertView.findViewById(R.id.image_message);
-        viewHolder.name = (TextView) convertView.findViewById(R.id.txt_contact_name);
-        viewHolder.message = (TextView) convertView.findViewById(R.id.txt_message);
+            convertView = inflater.inflate(R.layout.image_list_row, parent, false);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
+        }
 
         final MMS mms = list.get(position);
 
-        viewHolder.name.setText(list.get(position).getName());
-        viewHolder.message.setText(list.get(position).getContent());
-        viewHolder.imageMessage.setImageBitmap(list.get(position).getBitmap());
-        viewHolder.buttonMore = (ImageButton) convertView.findViewById(R.id.btn_settings);
-        viewHolder.buttonMore.setOnClickListener(new View.OnClickListener() {
+        holder.name.setText(list.get(position).getName());
+        holder.message.setText(list.get(position).getContent());
+        holder.imageMessage.setImageBitmap(list.get(position).getBitmap());
+
+        holder.buttonMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(context, viewHolder.buttonMore);
+                PopupMenu popup = new PopupMenu(context, holder.buttonMore);
                 //Inflating the Popup using xml file
                 popup.getMenuInflater()
                         .inflate(R.menu.drop_down_menu, popup.getMenu());
@@ -99,28 +108,28 @@ public class ImageMessageAdapter extends
             }
         });
 
-
-        /*if (list.get(position).getImageURI() != null) {
+        if (list.get(position).getImageURI() != null) {
             try {
                 Bitmap bitmap = SearchUtils.getRoundedShape(MediaStore.Images.Media.getBitmap(context.getContentResolver(), Uri.parse(list.get(position).getImageURI())));
-                viewHolder.image.setImageBitmap(bitmap);
+                holder.image.setImageBitmap(bitmap);
                 System.out.println(bitmap);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                viewHolder.image.setImageResource(R.drawable.contact);
+                holder.image.setImageResource(R.drawable.contact);
             } catch (IOException e) {
                 e.printStackTrace();
-                viewHolder.image.setImageResource(R.drawable.contact);
+                holder.image.setImageResource(R.drawable.contact);
             }
 
 
         } else {
             Log.w("tag", "os null");
-            viewHolder.image.setImageResource(R.drawable.contact);
-        }*/
+            holder.image.setImageResource(R.drawable.contact);
+        }
         return convertView;
 
     }
+
 
 }
 
