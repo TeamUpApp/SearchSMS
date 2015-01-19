@@ -13,15 +13,15 @@ public class MMS {
         private String content;
         private String date;
         private String imageURI;
-        private Bitmap bitmap;
+        private String bitmapID;
 
-        public MMS(String id, String name, String content, String date, String imageURI, Bitmap bitmap) {
+        public MMS(String id, String name, String content, String date, String imageURI, String bitmap) {
             this.id = id;
             this.name = name;
             this.content = content;
             this.date = date;
             this.imageURI = imageURI;
-            this.bitmap = bitmap;
+            this.bitmapID = bitmap;
         }
 
         public String getImageURI() {
@@ -44,5 +44,5 @@ public class MMS {
             return date;
         }
 
-        public Bitmap getBitmap(){ return bitmap;}
+        public String getBitmap(){ return bitmapID;}
     }

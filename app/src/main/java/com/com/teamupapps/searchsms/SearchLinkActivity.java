@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.com.teamupapps.searchsms.adapters.ImageMessageAdapter;
+import com.com.teamupapps.searchsms.adapters.LinkListAdapter;
 import com.com.teamupapps.searchsms.adapters.MessageListAdapter;
 import com.com.teamupapps.searchsms.models.MMS;
 import com.com.teamupapps.searchsms.models.SMS;
@@ -47,7 +48,7 @@ public class SearchLinkActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_fragment_search_links, menu);
+        //getMenuInflater().inflate(R.menu.menu_fragment_search_links, menu);
         return true;
     }
 
@@ -91,7 +92,7 @@ public class SearchLinkActivity extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main_activty, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_fragment_search_links, container, false);
             ButterKnife.inject(this, rootView);
 
             performSearch();
@@ -103,7 +104,7 @@ public class SearchLinkActivity extends Activity {
 
         private void performSearch() {
             List<SMS> found = SearchUtils.getHyperlinks(getActivity());
-            MessageListAdapter adapter = new MessageListAdapter(getActivity(), found);
+            LinkListAdapter adapter = new LinkListAdapter(getActivity(), found);
             listview.setAdapter(adapter);
             textCount.setText("Found " + found.size() );
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);

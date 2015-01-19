@@ -10,6 +10,7 @@ public class SMS {
     private String content;
     private String date;
     private String imageURI;
+    private String url;
 
     public SMS(String id, String name, String content, String date, String imageURI) {
         this.id = id;
@@ -37,5 +38,13 @@ public class SMS {
 
     public String getDate() {
         return date;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

@@ -4,15 +4,13 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/grid_background"
 
     tools:context="com.com.teamupapps.searchsms.SearchImageActivity$PlaceholderFragment">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
     <TextView
-        android:background="@color/actionbar_background"
+        android:background="@color/dark_blue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/text_count"
@@ -35,11 +33,16 @@
 
     </com.google.android.gms.ads.AdView>
 
-    <ListView
+    <GridView
         android:layout_width="wrap_content"
+        android:layout_margin="10sp"
         android:layout_height="wrap_content"
+        android:numColumns="2"
+        android:verticalSpacing="5sp"
+        android:horizontalSpacing="5sp"
         android:layout_above="@id/ads"
+        android:background="@color/grid_background"
         android:id="@+id/listView"
-        android:layout_below="@+id/editText"></ListView>
+        android:layout_below="@id/text_count"></GridView>
 
 </RelativeLayout>

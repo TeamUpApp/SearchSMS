@@ -3,7 +3,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Light">
-        <item name="android:background">@color/actionbar_background</item>
+
         <item name="android:actionBarStyle">@style/MyActionBar</item>
     </style>
     <!-- ActionBar styles -->

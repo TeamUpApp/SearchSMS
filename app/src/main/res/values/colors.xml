@@ -3,6 +3,8 @@
 
     <color name="actionbar_background">#00bcd4</color>
     <color name="background">#e0f7fa</color>
+    <color name="dark_blue">#11809f</color>
     <color name="black_overlay">#66000000</color>
+    <color name ="grid_background">#DEDAD5</color>
 
 </resources>

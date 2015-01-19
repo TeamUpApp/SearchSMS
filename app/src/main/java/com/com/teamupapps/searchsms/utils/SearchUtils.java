@@ -47,79 +47,81 @@ public class SearchUtils {
         String[] number = new String[cursor.getCount()];
         String[] id = new String[cursor.getCount()];
         String[] date = new String[cursor.getCount()];
-        Bitmap[] bitmap = new Bitmap[cursor.getCount()];
+        String[] bitmap = new String[cursor.getCount()];
         String body = "";
 
         if (cursor.moveToFirst()) {
 
-                String string = cursor.getString(cursor.getColumnIndex("ct_t"));
-                if ("application/vnd.wap.multipart.related".equals(string)) {
+            String string = cursor.getString(cursor.getColumnIndex("ct_t"));
+            if ("application/vnd.wap.multipart.related".equals(string)) {
 
-                    for (int i = 0; i < cursor.getCount(); i++) {
-                        String mmsId = cursor.getString(cursor.getColumnIndex("_id"));
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    String mmsId = cursor.getString(cursor.getColumnIndex("_id"));
 
-                        String selectionPart = "mid =" + mmsId;
-                        Uri uri = Uri.parse("content://mms/part");
-                        Cursor cursor2 = context.getContentResolver().query(uri, null,
-                                selectionPart, null, null);
+                    String selectionPart = "mid =" + mmsId;
+                    Uri uri = Uri.parse("content://mms/part");
+                    Cursor cursor2 = context.getContentResolver().query(uri, null,
+                            selectionPart, null, null);
 
-                       // String addselectionPart = "mid =" + mmsId;
-                       // "content://mms/{MmsId}/addr"
-                        Uri adduri = Uri.parse("content://mms/"+mmsId+"/addr" );
-                        Cursor cursoradd = context.getContentResolver().query(adduri, null,
-                                null, null, null);
-                        if(cursoradd.moveToFirst()) {
+                    // String addselectionPart = "mid =" + mmsId;
+                    // "content://mms/{MmsId}/addr"
+                    Uri adduri = Uri.parse("content://mms/" + mmsId + "/addr");
+                    Cursor cursoradd = context.getContentResolver().query(adduri, null,
+                            null, null, null);
+                    if (cursoradd.moveToFirst()) {
 
 
-                            number[i] = cursoradd.getString(cursoradd.getColumnIndex("address"));
-                        }
-                        Log.i("ID ad i",mmsId+" "+i);
-
-                        if (cursor2.moveToFirst()) {
-                            do {
-                                String partId = cursor2.getString(cursor2.getColumnIndex("_id"));
-                                String type = cursor2.getString(cursor2.getColumnIndex("ct"));
-
-                                if ("text/plain".equals(type)) {
-                                    String data = cursor2.getString(cursor2.getColumnIndex("_data"));
-                                    Log.i("data", "" + i + " " + data);
-
-                                    if (data != null) {
-                                        // implementation of this method below
-                                        body = getMmsText(context, partId);
-                                    } else {
-                                        body = cursor2.getString(cursor2.getColumnIndex("text"));
-                                    }
-
-                                }else{body = "";}
-
-                                if ("image/jpeg".equals(type) || "image/bmp".equals(type) ||
-                                        "image/gif".equals(type) || "image/jpg".equals(type) ||
-                                        "image/png".equals(type)) {
-                                    bitmap[i] = getMmsImage(context, partId);
-                                    Log.i("IMAGE", "" + i + " " + bitmap.toString());
-                                }
-                                //}
-
-                                id[i] = partId;
-                                mmsBody[i] = body;
-
-                                date[i] = "";
-
-                               // MMS foundMMS = new MMS(id[i], getContactName(number[i], contactMap), mmsBody[i], date[i], getContactName(number[i], contactImageMap), bitmap[i]);
-                               // MMS foundMMS = new MMS(partId, getContactName(number[i], contactMap), body, "", getContactName(number[i], contactImageMap), getMmsImage(context, partId));
-                                //mmsList.add(foundMMS);
-                            } while (cursor2.moveToNext());
-
-                            Log.i("YO", getContactName(number[i], contactMap));
-                            MMS foundMMS = new MMS(id[i], getContactName(number[i], contactMap), mmsBody[i], date[i], getContactName(number[i], contactImageMap), bitmap[i]);
-                            mmsList.add(foundMMS);
-                            mmsBody[i] ="";
-                        }
-                        cursor.moveToNext();
+                        number[i] = cursoradd.getString(cursoradd.getColumnIndex("address"));
                     }
+                    Log.i("ID ad i", mmsId + " " + i);
 
+                    if (cursor2.moveToFirst()) {
+                        do {
+                            String partId = cursor2.getString(cursor2.getColumnIndex("_id"));
+                            String type = cursor2.getString(cursor2.getColumnIndex("ct"));
+
+                            if ("text/plain".equals(type)) {
+                                String data = cursor2.getString(cursor2.getColumnIndex("_data"));
+                                Log.i("data", "" + i + " " + data);
+
+                                if (data != null) {
+                                    // implementation of this method below
+                                    body = getMmsText(context, partId);
+                                } else {
+                                    body = cursor2.getString(cursor2.getColumnIndex("text"));
+                                }
+
+                            } else {
+                                body = "";
+                            }
+
+                            if ("image/jpeg".equals(type) || "image/bmp".equals(type) ||
+                                    "image/gif".equals(type) || "image/jpg".equals(type) ||
+                                    "image/png".equals(type)) {
+                                bitmap[i] = partId;
+                                Log.i("IMAGE", "" + i + " " + bitmap.toString());
+                            }
+                            //}
+
+                            id[i] = partId;
+                            mmsBody[i] = body;
+
+                            date[i] = "";
+
+                            // MMS foundMMS = new MMS(id[i], getContactName(number[i], contactMap), mmsBody[i], date[i], getContactName(number[i], contactImageMap), bitmap[i]);
+                            // MMS foundMMS = new MMS(partId, getContactName(number[i], contactMap), body, "", getContactName(number[i], contactImageMap), getMmsImage(context, partId));
+                            //mmsList.add(foundMMS);
+                        } while (cursor2.moveToNext());
+
+                        Log.i("YO", getContactName(number[i], contactMap));
+                        MMS foundMMS = new MMS(id[i], getContactName(number[i], contactMap), mmsBody[i], date[i], getContactName(number[i], contactImageMap), bitmap[i]);
+                        mmsList.add(foundMMS);
+                        mmsBody[i] = "";
+                    }
+                    cursor.moveToNext();
                 }
+
+            }
 
         }
 
@@ -150,8 +152,9 @@ public class SearchUtils {
                 String regex = "\\(?\\b(http://|www[.]|Www[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
                 Pattern p = Pattern.compile(regex);
                 Matcher m = p.matcher(body[i]);
+                String urlStr ="";
                 while (m.find()) {
-                    String urlStr = m.group();
+                    urlStr = m.group();
                     if (urlStr.startsWith("(") && urlStr.endsWith(")")) {
                         urlStr = urlStr.substring(1, urlStr.length() - 1);
                     }
@@ -160,6 +163,7 @@ public class SearchUtils {
 
                 if (found) {
                     SMS foundSMS = new SMS(id[i], getContactName(number[i], contactMap), body[i], date[i], getContactName(number[i], contactImageMap));
+                    foundSMS.setUrl(urlStr);
                     smsLinkList.add(foundSMS);
                     found = false;
                 }
@@ -170,25 +174,6 @@ public class SearchUtils {
 
         return smsLinkList;
 
-    }
-
-    public static Bitmap getMmsImage(Context context, String _id) {
-        Uri partURI = Uri.parse("content://mms/part/" + _id);
-        InputStream is = null;
-        Bitmap bitmap = null;
-        try {
-            is = context.getContentResolver().openInputStream(partURI);
-            bitmap = BitmapFactory.decodeStream(is);
-        } catch (IOException e) {
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                }
-            }
-        }
-        return bitmap;
     }
 
     public static String getMmsText(Context context, String id) {

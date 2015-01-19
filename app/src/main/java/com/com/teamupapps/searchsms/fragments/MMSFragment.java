@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -46,7 +47,7 @@ public class MMSFragment  extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main_activty, container, false);
 
-        final ListView listView = (ListView) rootView.findViewById(R.id.listView);
+        final GridView listView = (GridView) rootView.findViewById(R.id.listView);
 
         final Map<String, String> countMap;
         countMap = SearchUtils.getContactList(getActivity());

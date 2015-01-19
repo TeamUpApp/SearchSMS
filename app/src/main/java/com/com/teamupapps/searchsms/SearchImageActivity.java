@@ -15,6 +15,7 @@ import android.os.Build;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -50,7 +51,7 @@ public class SearchImageActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_search_image, menu);
+        //getMenuInflater().inflate(R.menu.menu_search_image, menu);
         return true;
     }
 
@@ -75,7 +76,7 @@ public class SearchImageActivity extends Activity {
     public static class PlaceholderFragment extends Fragment {
 
         @InjectView(R.id.listView)
-        ListView listview;
+        GridView listview;
         @InjectView(R.id.text_count)
         TextView textCount;
 
